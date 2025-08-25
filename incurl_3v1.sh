@@ -1,3 +1,4 @@
+
 #!/bin/bash
 set -e
 
@@ -30,20 +31,18 @@ done
 
 chmod +x t.sh s.sh d.sh
 
-# 🛠️ Adding aliases
-if ! grep -q "alias o=" ~/.bashrc; then
-    echo "alias o='bash ~/t.sh'" >> ~/.bashrc
-fi
-if ! grep -q "alias s=" ~/.bashrc; then
-    echo "alias s='bash ~/s.sh'" >> ~/.bashrc
-fi
-if ! grep -q "alias d=" ~/.bashrc; then
-    echo "alias d='bash ~/d.sh'" >> ~/.bashrc
-fi
+# Nahrádza celé bloky s aliasmi
+PREFIX=${PREFIX:-/data/data/com.termux/files/usr}
+mkdir -p "$PREFIX/bin"
 
-echo -e "\e[32m✅ Aliases added: o, s, d\e[0m"
-source ~/.bashrc
-clear
-
+for name in o s d; do
+  target="$HOME/${name}.sh"
+  wrapper="$PREFIX/bin/$name"
+  cat > "$wrapper" <<EOF
+#!/data/data/com.termux/files/usr/bin/bash
+exec bash "$target" "\$@"
+EOF
+  chmod +x "$wrapper"
+done
 echo -e "\e[32m✅ Installation completed. Use commands: o | s | d\e[0m"
 exit
