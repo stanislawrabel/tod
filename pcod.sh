@@ -23,7 +23,7 @@ pip install --upgrade pip wheel
 pip install .
 
 echo "📥 Downloading OTA downloader script and data..."
-curl -sSL "$REPO/t.sh" -o ~/realme-ota/ota_downloader.sh
+curl -sSL "$REPO/o.sh" -o ~/realme-ota/ota_downloader.sh
 curl -sSL "$REPO/models.txt" -o ~/realme-ota/models.txt
 curl -sSL "$REPO/devices.txt" -o ~/realme-ota/devices.txt
 chmod +x ~/realme-ota/ota_downloader.sh
