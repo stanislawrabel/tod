@@ -25,11 +25,11 @@ pip3 install --upgrade requests pycryptodome git+https://github.com/R0rt1z2/real
 echo "📥 Downloading scripts and data files..."
 REPO="https://raw.githubusercontent.com/stanislawrabel/tod/main"
 
-for file in t.sh s.sh d.sh models.txt devices.txt; do
+for file in o.sh s.sh d.sh models.txt devices.txt; do
     curl -sSL "$REPO/$file" -o "$file"
 done
 
-chmod +x t.sh s.sh d.sh
+chmod +x o.sh s.sh d.sh
 
 # Nahrádza celé bloky s aliasmi
 PREFIX=${PREFIX:-/data/data/com.termux/files/usr}
