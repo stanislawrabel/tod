@@ -331,9 +331,22 @@ else
 
     echo -e "${COLOR}➡️  You selected option $choice${RESET}"
 
-    read -p "🔢 Enter model number : " model_number
-    device_model="${prefix}${model_number}"
-    echo -e "✅ Selected model: ${COLOR}$device_model${RESET}"
+    # 🧩 Po zadaní model number
+read -p "🔢 Enter model number : " model_number
+device_model="${prefix}${model_number}"
+echo -e "✅ Selected model: ${COLOR}$device_model${RESET}"
+
+# 🧹 Odstráni regionálny suffix (EEA, IN, TR, RU, T2 atď.)
+base_model=$(echo "$device_model" | sed 's/EEA\|IN\|TR\|RU\|T2//g')
+
+# 🔍 Vyhľadanie názvu modelu v models.txt podľa základného modelu
+model_name=$(grep -i "^$base_model" models.txt | cut -d'|' -f2 | xargs)
+
+if [[ -n "$model_name" ]]; then
+    echo -e "📱 Model name: ${COLOR}${model_name}${RESET}"
+else
+    echo -e "📱 Model name: ${RED}Unknown model (not found in models.txt)${RESET}"
+fi    
 
     read -p "📌 Manifest + OTA version : " input
     region="${input:0:${#input}-1}"
