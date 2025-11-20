@@ -109,15 +109,15 @@ model_name="${MODEL_NAMES[$clean_model]}"
 
 echo -e "\n     ${BLUE}${model_name:-Unknown}${RESET} 
 (${clean_model})${GREEN}$region_name${RESET} (code: ${YELLOW}$region_code${RESET})"
-echo -e "+--------------------+"
-printf "| %-18s | ${YELLOW}%-33s${RESET} \n" "OTA version:" "$ota_version_full"
-printf "| %-18s | ${YELLOW}%-33s${RESET} \n" "Displayed version:" "$real_version_name"
-printf "| %-18s | ${YELLOW}%-33s${RESET} \n" "Android version:" "$android_version"
-printf "| %-18s | ${YELLOW}%-33s${RESET} \n" "OS version:" "$os_version"
-printf "| %-18s | ${YELLOW}%-33s${RESET} \n" "Security patch:" "$security_os"
-printf "| %-18s | ${YELLOW}%-33s${RESET} \n" "Version:" "$version_type_id"
-printf "| %-18s | %-33b                  \n" "Local install:" "$forbid_status"
-echo -e "+--------------------+"
+echo -e 
+printf "OTA version:" "$ota_version_full
+printf "Displayed version:" "$real_version_name"
+printf "Android version:" "$android_version"
+printf "OS version:" "$os_version"
+printf "Security patch:" "$security_os"
+printf "Version:" "$version_type_id"
+printf "Local install:" "$forbid_status"
+echo -e
 
     echo -e "  📥                   About this update: 
 ${GREEN}$about_update_url${RESET}"
@@ -354,5 +354,5 @@ while true; do
             echo "❌ Invalid option."
             ;;
     esac
-donee
+done
 
