@@ -28,11 +28,11 @@ curl -sSL "$REPO/models.txt" -o ~/realme-ota/models.txt
 curl -sSL "$REPO/devices.txt" -o ~/realme-ota/devices.txt
 chmod +x ~/realme-ota/ota_downloader.sh
 
-echo "🔗 Adding alias 'o' to ~/.bashrc..."
+echo "🔗 Adding alias 'ota' to ~/.bashrc..."
 if ! grep -q "alias ota=" ~/.bashrc; then
-    echo "alias o='cd ~/realme-ota && source venv/bin/activate && bash ota_downloader.sh'" >> ~/.bashrc
+    echo "alias ota='cd ~/realme-ota && source venv/bin/activate && bash ota_downloader.sh'" >> ~/.bashrc
 fi
 source ~/.bashrc
 
 clear
-echo -e "\e[32m✅ Installation completed! You can now run the script with: o\e[0m"
+echo -e "\e[32m✅ Installation completed! You can now run the script with: ota\e[0m"
