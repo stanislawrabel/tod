@@ -110,12 +110,12 @@ model_name="${MODEL_NAMES[$clean_model]}"
 echo -e "\n     ${BLUE}${model_name:-Unknown}${RESET} 
 (${clean_model})${GREEN}$region_name${RESET} (code: ${YELLOW}$region_code${RESET})"
 echo -e 
-echo -e "OTA version:" "$ota_version_full
-echo -e "Displayed version:" "$real_version_name"
-echo -e "Android version:" "$android_version"
-echo -e "OS version:" "$os_version"
-echo -e "Security patch:" "$security_os" 
-echo -e "Version:" "$version_type_id"
+echo -e "$ota_version_full"
+echo -e "$real_version_name"
+echo -e "$android_version"
+echo -e "$os_version"
+echo -e "$security_os" 
+echo -e "$version_type_id"
 echo -e "Local install:" "$forbid_status"
 echo -e 
  
