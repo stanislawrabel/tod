@@ -126,10 +126,9 @@ echo -e "${GREEN}$about_update_url${RESET}"
     download_link=$(echo "$output" | grep -o 'http[s]*://[^"]*' | head -n 1 | sed 's/["\r\n]*$//')
     modified_link=$(echo "$download_link" | sed 's/componentotacostmanual/opexcostmanual/g')
 
-    
-echo-e "    if [[ -n "$modified_link" ]]; then
+        if [[ -n "$modified_link" ]]; then
         echo -e "  📥                        Download link:" 
-${GREEN}$modified_link${RESET}"
+echo -e "${GREEN}$modified_link${RESET}"
 
 else
     echo -e "❌ No download link found."
