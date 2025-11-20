@@ -89,7 +89,7 @@ done
 # Získať URL k About this update
     about_update_url=$(echo "$output" | grep -oP '"panelUrl"\s*:\s*"\K[^"]+')
 
-## 🟡 Extrahuj celý obsah poľa "header" z JSON výstupu
+# 🟡 Extrahuj celý obsah poľa "header" z JSON výstupu
 header_block=$(echo "$output" | sed -n '/"header"\s*:/,/]/p' | tr -d '\n' | sed -E 's/.*"header"[[:space:]]*:[[:space:]]*([^]+).*/\1/')
 # 🔍 Skontroluj obsah poľa na výskyt hodnoty
 if echo "$header_block" | grep -q 'forbid_ota_local_update=true'; then
@@ -110,25 +110,25 @@ model_name="${MODEL_NAMES[$clean_model]}"
 echo -e "\n     ${BLUE}${model_name:-Unknown}${RESET} 
 (${clean_model})${GREEN}$region_name${RESET} (code: ${YELLOW}$region_code${RESET})"
 echo -e 
-printf "OTA version:" "$ota_version_full
-printf "Displayed version:" "$real_version_name"
-printf "Android version:" "$android_version"
-printf "OS version:" "$os_version"
-printf "Security patch:" "$security_os"
-printf "Version:" "$version_type_id"
-printf "Local install:" "$forbid_status"
-echo -e
-
-    echo -e "  📥                   About this update: 
-${GREEN}$about_update_url${RESET}"
+echo -e "OTA version:" "$ota_version_full
+echo -e "Displayed version:" "$real_version_name"
+echo -e "Android version:" "$android_version"
+echo -e "OS version:" "$os_version"
+echo -e "Security patch:" "$security_os" 
+echo -e "Version:" "$version_type_id"
+echo -e "Local install:" "$forbid_status"
+echo -e 
+ 
+     echo -e "  📥                        About this update:"
+echo -e "${GREEN}$about_update_url${RESET}"
   
 
     download_link=$(echo "$output" | grep -o 'http[s]*://[^"]*' | head -n 1 | sed 's/["\r\n]*$//')
     modified_link=$(echo "$download_link" | sed 's/componentotacostmanual/opexcostmanual/g')
 
     
-    if [[ -n "$modified_link" ]]; then
-        echo -e "  📥                        Download link: 
+echo-e "    if [[ -n "$modified_link" ]]; then
+        echo -e "  📥                        Download link:" 
 ${GREEN}$modified_link${RESET}"
 
 else
