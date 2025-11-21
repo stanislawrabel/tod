@@ -26,11 +26,11 @@ pip install .
 echo "📥 Downloading scripts and data files..."
 REPO="https://raw.githubusercontent.com/stanislawrabel/tod/main"
 
-for file in o.sh s.sh d.sh models.txt devices.txt; do
+for file in pc.sh s.sh d.sh models.txt devices.txt; do
     curl -sSL "$REPO/$file" -o "$file"
 done
 
-chmod +x o.sh s.sh d.sh
+chmod +x pc.sh s.sh d.sh
 
 # Nahrádza celé bloky s aliasmi
 PREFIX=${PREFIX:-/data/data/com.termux/files/usr}
