@@ -23,14 +23,15 @@ pip install --upgrade pip wheel
 pip install .
 
 # 🔹 SCRIPTS & FILES
-echo "📥 Downloading scripts and data files..."
-REPO="https://raw.githubusercontent.com/stanislawrabel/tod/main"
+echo "📥 Downloading OTA downloader script and data..."
+curl -sSL "$REPO/o.sh" -o ~/realme-ota/o.sh
+curl -sSL "$REPO/s.sh" -o ~/realme-ota/s.sh
+curl -sSL "$REPO/d.sh" -o ~/realme-ota/d.sh
+curl -sSL "$REPO/models.txt" -o ~/realme-ota/models.txt
+curl -sSL "$REPO/devices.txt" -o ~/realme-ota/devices.txt
+chmod +x ~/realme-ota/o.sh s.sh d.sh
 
-for file in pc.sh s.sh d.sh models.txt devices.txt; do
-    curl -sSL "$REPO/$file" -o "$file"
-done
 
-chmod +x pc.sh s.sh d.sh
 
 # Nahrádza celé bloky s aliasmi
 PREFIX=${PREFIX:-/data/data/com.termux/files/usr}
