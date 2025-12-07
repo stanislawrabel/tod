@@ -131,12 +131,12 @@ ${GREEN}$about_update_url${RESET}"
   
 
     download_link=$(echo "$output" | grep -o 'http[s]*://[^"]*' | head -n 1 | sed 's/["\r\n]*$//')
-    modified_link=$(echo "$download_link" | sed 's/componentotamanual/opexcostmanual-eu/g')
+    modified_link=$(echo "$download_link" | sed 's/componentotamanual/componentotamanual-eu/g')
 
     # Dynamická úprava linku podľa servera
-    host=$(echo "$download_link" | sed -E 's#https?://([^/]+).*#\1#')
-    domain_suffix=${host#*.}
-    server_id=$(echo "$server" | grep -o '[0-9]\+' || echo "3")
+#    host=$(echo "$download_link" | sed -E 's#https?://([^/]+).*#\1#')
+#    domain_suffix=${host#*.}
+#    server_id=$(echo "$server" | grep -o '[0-9]\+' || echo "3")
 
     case "$server_id" in
         3) server_code="eu" ;;
@@ -146,7 +146,7 @@ ${GREEN}$about_update_url${RESET}"
         *) server_code="eu" ;;
     esac
 
-    new_label="gauss-opexcostmanual"
+ #   new_label="gauss-opexcostmanual"
     [[ -n "$server_code" ]] && new_label="${new_label}-${server_code}"
     modified_host="${new_label}.${domain_suffix}"
     modified_link="${download_link/$host/$modified_host}"
