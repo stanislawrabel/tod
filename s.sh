@@ -176,9 +176,9 @@ ${GREEN}$about_update_url${RESET}"
     esac
 
  #   new_label="gauss-opexcostmanual"
-    [[ -n "$server_code" ]] && new_label="${new_label}-${server_code}"
-    modified_host="${new_label}.${domain_suffix}"
-    modified_link="${download_link/$host/$modified_host}"
+ #   [[ -n "$server_code" ]] && new_label="${new_label}-${server_code}"
+#    modified_host="${new_label}.${domain_suffix}"
+ #   modified_link="${download_link/$host/$modified_host}"
 
 
     
