@@ -161,7 +161,7 @@ ${GREEN}$about_update_url${RESET}"
   
 
     download_link=$(echo "$output" | grep -o 'http[s]*://[^"]*' | head -n 1 | sed 's/["\r\n]*$//')
-    modified_link=$(echo "$download_link" | sed 's/componentotamanual/componentotamanual-eu/g')
+    modified_link=$(echo "$download_link" | sed 's/componentotamanual/componentotamanual/g')
    # Dynamická úprava linku podľa servera
 #    host=$(echo "$download_link" | sed -E 's#https?://([^/]+).*#\1#')
 #    domain_suffix=${host#*.}
