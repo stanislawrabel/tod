@@ -16,7 +16,7 @@
   BLACK_BG="\033[40" 
   RESET="\033[0m"
 
-  OUT="/storage/emulated/0/Download/DownloadeR/ota_common.txt"
+  OUT="C/DownloadeR/ota_common.txt"
 
 mkdir -p "$(dirname "$OUT")"
 
