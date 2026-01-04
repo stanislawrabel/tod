@@ -16,6 +16,10 @@
   BLACK_BG="\033[40" 
   RESET="\033[0m"
 
+  OUT="/storage/emulated/0/Download/DownloadeR/ota_common.txt"
+
+mkdir -p "$(dirname "$OUT")"
+
 # 📌 Regióny, verzie a servery
 declare -A REGIONS=(
     [00]="EX Export 00000000"
@@ -67,6 +71,28 @@ declare -A MODEL_NAMES
 [[ -f models.txt ]] && while IFS='|' read -r code name; do
   MODEL_NAMES["$code"]="$name"
 done < models.txt
+
+
+resolve_zip() {
+  curl -s -I --http1.1 \
+    -H "User-Agent: Dalvik/2.1.0 (Linux; Android 16)" \
+    -H "userId: oplus-ota|16002018" \
+    -H "Accept: */*" \
+    -H "Accept-Encoding: identity" \
+    "$1" \
+  | grep -i '^location:' \
+  | tail -1 \
+  | awk '{print $2}' \
+  | tr -d '\r'
+}
+
+fix_old_zip() {
+  local url="$1"
+
+  echo "$url" | sed \
+    -e 's|gauss-componentotamanual.allawnofs.com|gauss-opexcostmanual-eu.allawnofs.com|'
+}
+
 
 # 📌 Funkcia na spracovanie OTA
 run_ota() {
@@ -130,37 +156,60 @@ echo -e "  📥                   About this update:
 ${GREEN}$about_update_url${RESET}"
   
 
-    download_link=$(echo "$output" | grep -o 'http[s]*://[^"]*' | head -n 1 | sed 's/["\r\n]*$//')
-    modified_link=$(echo "$download_link" | sed 's/componentotamanual/componentotamanual-eu/g')
+   download_link=$(echo "$output" | grep -o 'http[s]*://[^"]*' | head -n 1 | sed 's/["\r\n]*$//')
+   modified_link=$(echo "$download_link" | sed 's/componentotamanual/componentotamanual/g')       
 
-    # Dynamická úprava linku podľa servera
-#    host=$(echo "$download_link" | sed -E 's#https?://([^/]+).*#\1#')
-#    domain_suffix=${host#*.}
-#    server_id=$(echo "$server" | grep -o '[0-9]\+' || echo "3")
+fixed_zip=$(fix_old_zip "$download_link")
 
-    case "$server_id" in
-        3) server_code="eu" ;;
-        2) server_code="in" ;;
-        1) server_code="cn" ;;
-        0) server_code="sg" ;;
-        *) server_code="eu" ;;
-    esac
+if [[ "$download_link" == *"downloadCheck"* ]]; then
+  resolved_zip=$(resolve_zip "$download_link")
+else
+  resolved_zip="$fixed_zip"
+fi
 
- #   new_label="gauss-opexcostmanual"
-    [[ -n "$server_code" ]] && new_label="${new_label}-${server_code}"
-    modified_host="${new_label}.${domain_suffix}"
-    modified_link="${download_link/$host/$modified_host}"
 
+FINAL_ZIP_URL="$download_link"
+
+if [[ "$download_link" == *"downloadCheck"* ]]; then
+    FINAL_ZIP_URL=$(resolve_zip "$download_link")
+fi
+fixed_zip=$(fix_old_zip "$download_link")
+
+OUT="/storage/emulated/0/Download/DownloadeR/ota_common.txt"
+
+mkdir -p "$(dirname "$OUT")"
 
     
+  cat > "$OUT" <<EOF
+MODEL=$device_model
+REGION=$region_data
+OTA=$ota_version_full
+ANDROID="Android $android_version"
+OS="$os_version"
+PATCH=$security_os
+VERSION=$version_type_id
+LOCAL_INSTALL=$local_install_raw
+ABOUT="$about_update_url"
+DOWNLOAD="$FINAL_ZIP_URL"
+EOF
+
+
+    echo -e "📥    About this update: 
+${GREEN}$about_update_url${RESET}"
     if [[ -n "$modified_link" ]]; then
-echo -e "  📥                      Download link: 
+    echo -e "📥    Download link: 
 ${GREEN}$modified_link${RESET}"
+    else
+        echo -e "❌ Download link not found."
+        
+   fi
 
+if [[ -n "$FINAL_ZIP_URL" ]]; then
+echo -e "📥    Resolved link:"
+echo -e "${GREEN}$resolved_zip${RESET}"
 else
-    echo -e "❌ No download link found."
- fi   
-
+  echo "❌ No download link found."
+fi
     echo "$ota_version_full" >> "ota_${device_model}.txt"
     echo "$modified_link" >> "ota_${device_model}.txt"
     echo "" >> "ota_${device_model}.txt"
