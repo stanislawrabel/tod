@@ -50,11 +50,13 @@ declare -A REGIONS=(
     [9E]="BR Brazil 10011110"
     [97]="CN China 10010111"
 )
+
 declare -A VERSIONS=(
   [A]="Launch version" 
   [C]="First update" 
   [F]="Second update" 
   [H]="Third update"
+
 )
 declare -A SERVERS=(
   [97]="-r 1" 
@@ -105,8 +107,8 @@ run_ota() {
     for rm in TR RU EEA T2 CN IN ID MY TH EU; do 
     ota_model="${ota_model//$rm/}"; 
 done
-}
-    ota_command="realme-ota $server $device_model ${ota_model}_11.${version}.01_0001_100001010001 6 $nv_id"
+
+    ota_command="realme-ota $server $device_model ${ota_model}_11.${version}.01_0001_100001010000 6 $nv_id"
     
     output=$(eval "$ota_command")
     
@@ -154,7 +156,6 @@ printf "${BLACK_BG}${WHITE} %-18s${RESET} ${YELLOW}%-33s${RESET} \n" "Security p
 printf "${BLACK_BG}${WHITE} %-18s${RESET} ${YELLOW}%-33s${RESET} \n" "Version:" "$version_type_id"
 printf "${BLACK_BG}${WHITE} %-18s${RESET}  %-33b   \n"  "Local install:"      "$forbid_status" 
 printf "${BLACK_BG}${WHITE} %-18s${RESET} ${YELLOW}%-33s${RESET}\n" "MD5:" "$md5"
-md5=$(echo "$output" | grep -oE '"md5"\s*:\s*"[^"]+"' | head -n1 | cut -d'"' -f4)
 echo -e
 echo -e "  📥                   About this update: 
 ${GREEN}$about_update_url${RESET}"
