@@ -30,15 +30,19 @@ source venv/bin/activate
 pip install --upgrade pip wheel
 pip install .
 
-deactivate
-# overenie
-if ! command -v realme-ota >/dev/null; then
-  echo "❌ realme-ota not installed correctly"
-  exit 1
+
+BIN_D source "$INSTALL_DIR/venv/bin/activate"
+
+if ! python -c "import realme_ota" 2>/dev/null; then
+    echo "❌ realme-ota not installed correctly"
+    deactivate
+    exit 1
 fi
 
+deactivate
+
 INSTALL_DIR="$HOME/tod"
-BIN_DIR="$HOME/.local/bin"
+IR="$HOME/.local/bin"
 
 mkdir -p "$INSTALL_DIR"
 mkdir -p "$BIN_DIR"
