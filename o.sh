@@ -16,7 +16,7 @@
   BLACK_BG="\033[40" 
   RESET="\033[0m"
 
-  OUT="C/DownloadeR/ota_common.txt"
+  OUT="C:/DownloadeR/ota_common.txt"
 
 mkdir -p "$(dirname "$OUT")"
 
@@ -105,7 +105,7 @@ run_ota() {
     for rm in TR RU EEA T2 CN IN ID MY TH EU; do 
     ota_model="${ota_model//$rm/}"; 
 done
-
+}
     ota_command="realme-ota $server $device_model ${ota_model}_11.${version}.01_0001_100001010001 6 $nv_id"
     
     output=$(eval "$ota_command")
@@ -119,13 +119,15 @@ done
     ota_f_version=$(echo "$real_ota_version" | grep -oE '_11\.[A-Z]\.[0-9]+' | sed 's/_11\.//')
     ota_date=$(echo "$real_ota_version" | grep -oE '_[0-9]{12}$' | tr -d '_')
     ota_version_full="${ota_model}_11.${ota_f_version}_${region_code}_${ota_date}"
-version_type_id=$(echo "$output" | grep -oP '"versionTypeId"\s*:\s*"\K[^"]+')
+    version_type_id=$(echo "$output" | grep -oP '"versionTypeId"\s*:\s*"\K[^"]+')
+    md5=$(echo "$output" | grep -oE '"md5"\s*:\s*"[^"]+"' | head -n1 | cut -d'"' -f4)
+
 # Získať URL k About this update
     about_update_url=$(echo "$output" | grep -oP '"panelUrl"\s*:\s*"\K[^"]+')
 
 ## 🟡 Extrahuj celý obsah poľa "header" z JSON výstupu
 header_block=$(echo "$output" | sed -n '/"header"\s*:/,/]/p' | tr -d '\n' | sed -E 's/.*"header"[[:space:]]*:[[:space:]]*([^]+).*/\1/')
-# 🔍 Skontroluj obsah poľa na výskyt hodnoty
+# 🔍 Skon  troluj obsah poľa na výskyt hodnoty
 if echo "$header_block" | grep -q 'forbid_ota_local_update=true'; then
     forbid_status="${RED}❌ Forbidden${RESET}"
 elif echo "$header_block" | grep -q 'forbid_ota_local_update=false'; then
@@ -151,6 +153,9 @@ printf "${BLACK_BG}${WHITE} %-18s${RESET} ${YELLOW}%-33s${RESET} \n" "OS version
 printf "${BLACK_BG}${WHITE} %-18s${RESET} ${YELLOW}%-33s${RESET} \n" "Security patch:" "$security_os"
 printf "${BLACK_BG}${WHITE} %-18s${RESET} ${YELLOW}%-33s${RESET} \n" "Version:" "$version_type_id"
 printf "${BLACK_BG}${WHITE} %-18s${RESET}  %-33b   \n"  "Local install:"      "$forbid_status" 
+printf "${BLACK_BG}${WHITE} %-18s${RESET} ${YELLOW}%-33s${RESET}\n" "MD5:" "$md5"
+md5=$(echo "$output" | grep -oE '"md5"\s*:\s*"[^"]+"' | head -n1 | cut -d'"' -f4)
+
 echo -e
 echo -e "  📥                   About this update: 
 ${GREEN}$about_update_url${RESET}"
