@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-COMMON_FILE="C/DownloadeR/ota_common.txt"
+COMMON_FILE="C:/DownloadeR/ota_common.txt"
 
 if [[ ! -f "$COMMON_FILE" ]]; then
   echo "❌ ota_common.txt not found"
@@ -57,7 +57,7 @@ echo "$FINAL_URL"
 echo "➡️  Saving as: $FINAL_NAME"
 
 
-TARGET_DIR="/storage/emulated/0/Download/DownloadeR"
+TARGET_DIR="C:/DownloadeR"
 TARGET_NAME="${OTA}.zip"
 
 aria2c "$FINAL_URL" -d "$TARGET_DIR" -o "$TARGET_NAME"
