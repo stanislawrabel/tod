@@ -1,38 +1,61 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
-REPO="https://raw.githubusercontent.com/stanislawrabel/tod/main"
+export DEBIAN_FRONTEND=noninteractive
+
+REPO_RAW="https://raw.githubusercontent.com/stanislawrabel/tod/main"
 OTA_REPO="https://github.com/R0rt1z2/realme-ota.git"
 
-INSTALL_DIR="$HOME/realme-ota"
-BIN_DIR="$HOME/.local/bin"
-SHELL_PATH="/bin/bash"
+# =========================
+# 🔍 DETEKCIA PROSTREDIA
+# =========================
+if [[ -n "$TERMUX_VERSION" ]] || [[ "$PREFIX" == *com.termux* ]]; then
+    IS_TERMUX=1
+    INSTALL_DIR="$HOME/realme-ota"
+    BIN_DIR="$PREFIX/bin"
+    PYTHON_BIN="python"
+else
+    IS_TERMUX=0
+    INSTALL_DIR="$HOME/realme-ota"
+    BIN_DIR="$HOME/.local/bin"
+    PYTHON_BIN="python3"
+fi
 
 mkdir -p "$BIN_DIR"
 
 echo "📦 Updating system..."
-sudo apt update && sudo apt upgrade -y
-
-echo "📦 Installing dependencies..."
-sudo apt install -y python3-full python3-venv git curl nano
-
-echo "📥 Cloning realme-ota..."
-if [ ! -d "$INSTALL_DIR" ]; then
-    git clone "$OTA_REPO" "$INSTALL_DIR"
+if [[ "$IS_TERMUX" == "1" ]]; then
+    pkg update -y
+    pkg upgrade -y
+    pkg install -y python git curl
+else
+    sudo apt update
+    sudo apt upgrade -y
+    sudo apt install -y python3 python3-venv python3-pip git curl
 fi
+
+# =========================
+# 📥 CLONE realme-ota
+# =========================
+echo "📥 Installing realme-ota..."
+rm -rf "$INSTALL_DIR"
+git clone "$OTA_REPO" "$INSTALL_DIR"
 
 cd "$INSTALL_DIR"
 
-echo "🐍 Creating virtualenv..."
-python3 -m venv venv
+# =========================
+# 🐍 PYTHON VENV
+# =========================
+echo "🐍 Creating virtual environment..."
+$PYTHON_BIN -m venv venv
 source venv/bin/activate
 
 pip install --upgrade pip wheel
 pip install .
 
-
-BIN_D source "$INSTALL_DIR/venv/bin/activate"
-
+# =========================
+# ✅ OVERENIE INŠTALÁCIE
+# =========================
 if ! python -c "import realme_ota" 2>/dev/null; then
     echo "❌ realme-ota not installed correctly"
     deactivate
@@ -40,23 +63,45 @@ if ! python -c "import realme_ota" 2>/dev/null; then
 fi
 
 deactivate
+echo "✅ realme-ota installed correctly"
 
-INSTALL_DIR="$HOME/tod"
-IR="$HOME/.local/bin"
+# =========================
+# 📥 DOWNLOAD TVOJICH SKRIPTOV
+# =========================
+echo "📥 Downloading helper scripts..."
 
-mkdir -p "$INSTALL_DIR"
-mkdir -p "$BIN_DIR"
-
-echo "📥 Downloading scripts..."
-curl -sSL "$REPO/o.sh" -o "$INSTALL_DIR/o.sh"
-curl -sSL "$REPO/s.sh" -o "$INSTALL_DIR/s.sh"
-curl -sSL "$REPO/d.sh" -o "$INSTALL_DIR/d.sh"
-curl -sSL "$REPO/models.txt" -o "$INSTALL_DIR/models.txt"
-curl -sSL "$REPO/devices.txt" -o "$INSTALL_DIR/devices.txt"
+curl -fsSL "$REPO_RAW/o.sh" -o "$INSTALL_DIR/o.sh"
+curl -fsSL "$REPO_RAW/s.sh" -o "$INSTALL_DIR/s.sh"
+curl -fsSL "$REPO_RAW/d.sh" -o "$INSTALL_DIR/d.sh"
+curl -fsSL "$REPO_RAW/models.txt" -o "$INSTALL_DIR/models.txt"
+curl -fsSL "$REPO_RAW/devices.txt" -o "$INSTALL_DIR/devices.txt"
 
 chmod +x "$INSTALL_DIR/"*.sh
 
-echo "⚙️ Creating launchers..."
+# =========================
+# ⚙️ WRAPPERY (o / s / d)
+# =========================
+echo "⚙️ Creating launcher commands..."
+
+for name in o s d; do
+    cat > "$BIN_DIR/$name" <<EOF
+#!/usr/bin/env bash
+source "$INSTALL_DIR/venv/bin/activate"
+exec bash "$INSTALL_DIR/$name.sh" "\$@"
+EOF
+    chmod +x "$BIN_DIR/$name"
+done
+
+# =========================
+# ✅ HOTOVO
+# =========================
+echo ""
+echo "🎉 Installation completed successfully!"
+echo "➡️ Commands available:"
+echo "   o  → OTA Finder"
+echo "   s  → OTA Resolver"
+echo "   d  → OTA Downloader"
+echo ""echo "⚙️ Creating launchers..."
 
 for name in o s d; do
   cat > "$BIN_DIR/$name" <<EOF
