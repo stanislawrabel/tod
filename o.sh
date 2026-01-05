@@ -155,7 +155,6 @@ printf "${BLACK_BG}${WHITE} %-18s${RESET} ${YELLOW}%-33s${RESET} \n" "Version:" 
 printf "${BLACK_BG}${WHITE} %-18s${RESET}  %-33b   \n"  "Local install:"      "$forbid_status" 
 printf "${BLACK_BG}${WHITE} %-18s${RESET} ${YELLOW}%-33s${RESET}\n" "MD5:" "$md5"
 md5=$(echo "$output" | grep -oE '"md5"\s*:\s*"[^"]+"' | head -n1 | cut -d'"' -f4)
-
 echo -e
 echo -e "  📥                   About this update: 
 ${GREEN}$about_update_url${RESET}"
@@ -180,7 +179,7 @@ if [[ "$download_link" == *"downloadCheck"* ]]; then
 fi
 fixed_zip=$(fix_old_zip "$download_link")
 
-OUT="/storage/emulated/0/Download/DownloadeR/ota_common.txt"
+OUT="C:/DownloadeR/ota_common.txt"
 
 mkdir -p "$(dirname "$OUT")"
 
@@ -194,6 +193,7 @@ OS="$os_version"
 PATCH=$security_os
 VERSION=$version_type_id
 LOCAL_INSTALL=$local_install_raw
+md5 : "MD5"
 ABOUT="$about_update_url"
 DOWNLOAD="$FINAL_ZIP_URL"
 EOF
