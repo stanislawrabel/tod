@@ -76,7 +76,12 @@ declare -A MODEL_NAMES
 [[ -f models.txt ]] && while IFS='|' read -r code name; do
   MODEL_NAMES["$code"]="$name"
 done < models.txt
+MODELS_FILE="$SCRIPT_DIR/models.txt"
 
+if [[ ! -f "$MODELS_FILE" ]]; then
+  echo "❌ models.txt not found in $SCRIPT_DIR"
+  exit 1
+fi
 
 resolve_zip() {
   curl -s -I --http1.1 \
@@ -110,7 +115,7 @@ run_ota() {
     for rm in TR RU EEA T2 CN IN ID MY TH EU; do 
     ota_model="${ota_model//$rm/}"; 
 done
-
+}
     ota_command="realme-ota $server $device_model ${ota_model}_11.${version}.01_0001_100001010000 6 $nv_id"
     
     output=$(eval "$ota_command")
