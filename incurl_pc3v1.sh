@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-source "$HOME/realme-ota/venv/bin/activate"
-exec bash "$HOME/realme-ota/o.sh" "$@"
+
 set -e
 
 export DEBIAN_FRONTEND=noninteractive
