@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+source "$HOME/realme-ota/venv/bin/activate"
+exec bash "$HOME/realme-ota/o.sh" "$@"
 set -e
 
 export DEBIAN_FRONTEND=noninteractive
@@ -50,8 +52,8 @@ echo "🐍 Creating virtual environment..."
 $PYTHON_BIN -m venv venv
 source venv/bin/activate
 
-pip install --upgrade pip wheel
-pip install .
+"$VENV/bin/pip" install --upgrade pip wheel
+"$VENV/bin/pip" install .
 
 # =========================
 # ✅ OVERENIE INŠTALÁCIE
@@ -86,8 +88,8 @@ echo "⚙️ Creating launcher commands..."
 for name in o s d; do
     cat > "$BIN_DIR/$name" <<EOF
 #!/usr/bin/env bash
-source "$INSTALL_DIR/venv/bin/activate"
-exec bash "$INSTALL_DIR/$name.sh" "\$@"
+source "$HOME/realme-ota/venv/bin/activate"
+exec bash "$HOME/realme-ota/o.sh" "$@"
 EOF
     chmod +x "$BIN_DIR/$name"
 done
@@ -123,8 +125,8 @@ echo "✅ INSTALLATION COMPLETE (WSL)"
 echo "➡️ Commands available:"
 echo "   o  → OTA FindeR"
 echo "   s  → Share OTA links"
-echo "   d  → DownloadeR"pip install --upgrade pip wheel
-pip install .
+echo "   d  → DownloadeR" "$VENV/bin/pip" install --upgrade pip wheel
+"$VENV/bin/pip" install .
 
 # 🔹 DOWNLOAD SCRIPTS
 echo "📥 Downloading OTA downloader script and data..."
