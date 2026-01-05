@@ -4,24 +4,33 @@ set -e
 REPO="https://raw.githubusercontent.com/stanislawrabel/tod/main"
 OTA_REPO="https://github.com/R0rt1z2/realme-ota.git"
 
+INSTALL_DIR="$HOME/realme-ota"
+BIN_DIR="$HOME/.local/bin"
+SHELL_PATH="/bin/bash"
+
+mkdir -p "$BIN_DIR"
+
 echo "📦 Updating system..."
-sudo apt update
-sudo apt upgrade -y
+sudo apt update && sudo apt upgrade -y
 
 echo "📦 Installing dependencies..."
-sudo apt install -y \
-  python3 \
-  python3-pip \
-  git \
-  curl \
-  aria2 \
-  nano
+sudo apt install -y python3-full python3-venv git curl nano
 
-echo "📦 Installing Python packages..."
-pip3 install --upgrade pip wheel
-pip3 install requests pycryptodome
-pip3 install git+https://github.com/R0rt1z2/realme-ota
+echo "📥 Cloning realme-ota..."
+if [ ! -d "$INSTALL_DIR" ]; then
+    git clone "$OTA_REPO" "$INSTALL_DIR"
+fi
 
+cd "$INSTALL_DIR"
+
+echo "🐍 Creating virtualenv..."
+python3 -m venv venv
+source venv/bin/activate
+
+pip install --upgrade pip wheel
+pip install .
+
+deactivate
 # overenie
 if ! command -v realme-ota >/dev/null; then
   echo "❌ realme-ota not installed correctly"
