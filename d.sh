@@ -71,6 +71,13 @@ aria2c \
   --dir="$BASE_DIR" \
   "$FINAL_URL"
 
+FINAL_PATH="$TARGET_DIR/$TARGET_NAME"
 
+echo "🔐 Verifying MD5..."
+if [[ -n "$MD5" ]]; then
+  echo "$MD5  $FINAL_PATH" | md5sum -c -
+else
+  echo "⚠️ MD5 not provided, skipping check"
+fi
 
 echo "✅ Done: $FINAL_PATH"
