@@ -1,4 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# === FIX WORKING DIRECTORY ===
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR" || exit 1
+
+DEVICES_FILE="$SCRIPT_DIR/devices.txt"
+MODELS_FILE="$SCRIPT_DIR/models.txt"
+COMMON_OUT="C /DownloadeR/ota_common.txt"
+
 
 # 🎨 Farby pre výstup
 
