@@ -194,8 +194,8 @@ ANDROID="$android_version"
 OS="$os_version"
 PATCH=$security_os
 VERSION=$version_type_id
-LOCAL_INSTALL=Allowed
-MD5=7ef92da5c390871ca7b919850e33334
+LOCAL_INSTALL=
+MD5=
 ABOUT="$about_update_url"
 DOWNLOAD="$FINAL_ZIP_URL"
 EOF
