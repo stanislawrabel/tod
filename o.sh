@@ -1,12 +1,15 @@
 #!/usr/bin/env bash
 
+BASE_DIR="/mnt/c/DownloadeR"
+COMMON_FILE="/mnt/c/DownloadeR/ota_common.txt"
+
 # === FIX WORKING DIRECTORY ===
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR" || exit 1
 
 DEVICES_FILE="$SCRIPT_DIR/devices.txt"
 MODELS_FILE="$SCRIPT_DIR/models.txt"
-COMMON_OUT="C /DownloadeR/ota_common.txt"
+COMMON_OUT="mmt/c/DownloadeR/ota_common.txt"
 
 
 # 🎨 Farby pre výstup
@@ -178,7 +181,7 @@ if [[ "$download_link" == *"downloadCheck"* ]]; then
 fi
 fixed_zip=$(fix_old_zip "$download_link")
 
-OUT="C:/DownloadeR/ota_common.txt"
+OUT="/mnt/c/DownloadeR/ota_common.txt"
 
 mkdir -p "$(dirname "$OUT")"
 
@@ -187,12 +190,12 @@ mkdir -p "$(dirname "$OUT")"
 MODEL=$device_model
 REGION=$region_data
 OTA=$ota_version_full
-ANDROID="Android $android_version"
+ANDROID="$android_version"
 OS="$os_version"
 PATCH=$security_os
 VERSION=$version_type_id
 LOCAL_INSTALL=$local_install_raw
-md5 : "MD5"
+MD5="md5"
 ABOUT="$about_update_url"
 DOWNLOAD="$FINAL_ZIP_URL"
 EOF
