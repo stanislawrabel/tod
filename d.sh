@@ -55,24 +55,24 @@ fi
 TARGET_DIR="/mnt/c/DownloadeR"
 TARGET_NAME="${OTA}.zip"
 
-aria2c "$FINAL_URL" -d "$TARGET_DIR" -o "$TARGET_NAME"
+FINAL_PATH="$TARGET_DIR/$TARGET_NAME"
 
-# === DOWNLOAD ===
 aria2c \
   --file-allocation=trunc \
   --summary-interval=1 \
   --continue=true \
-  --out="$FINAL_NAME" \
-  --dir="$BASE_DIR" \
+  --out="$TARGET_NAME" \
+  --dir="$TARGET_DIR" \
   "$FINAL_URL"
 
-FINAL_PATH="$TARGET_DIR/$TARGET_NAME"
 
-echo "🔐 Verifying MD5..."
+
 if [[ -n "$MD5" ]]; then
-  echo "$MD5  $FINAL_PATH" | md5sum -c -
+  echo "🔐 Verifying MD5..."
+  echo "${MD5}  ${FINAL_PATH}" | md5sum -c -
 else
-  echo "⚠️ MD5 not provided, skipping check"
+  echo "⚠️ MD5 not provided – skipping check"
 fi
+
 
 echo "✅ Done: $FINAL_PATH"
