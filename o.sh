@@ -187,17 +187,18 @@ mkdir -p "$(dirname "$OUT")"
 
     
   cat > "$OUT" <<EOF
-MODEL=$device_model
-REGION=$region_data
-OTA=$ota_version_full
-ANDROID="$android_version"
-OS="$os_version"
-PATCH=$security_os
-VERSION=$version_type_id
-LOCAL_INSTALL=
-MD5=
-ABOUT="$about_update_url"
-DOWNLOAD="$FINAL_ZIP_URL"
+MODEL="RMX5011"
+REGION="TH"
+OTA="RMX5011_11.F.56_TH_202512132152"
+ANDROID="Android 16"
+OS="ColorOS 16.0.0"
+PATCH="2025-12-01"
+VERSION="non_display"
+LOCAL_INSTALL="Allowed"
+MD5=""
+ABOUT="https://gauss-componentotamanual.allawnofs.com/remove-4e22fb4f6b60d23723825d739bd3992d/component-ota/26/01/04/2afc04be5ce5437798eb9cbc8bb635ed.html"
+DOWNLOAD="https://gauss-compota-c-fr.allawnofs.com/remove-4e22fb4f6b60d23723825d739bd3992d/g-e85d254ec8c5f58e7bf6e5729bd6b72f/component-ota/25/12/15/0ee00b1ae4fd4e8398d047ab38b4f071.zip"
+
 EOF
 
 
