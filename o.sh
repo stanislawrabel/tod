@@ -195,7 +195,7 @@ OS="$os_version"
 PATCH=$security_os
 VERSION=$version_type_id
 LOCAL_INSTALL="$Allowed"
-MD5=""
+MD5="md5sum"
 ABOUT="$about_update_url"
 DOWNLOAD="$FINAL_ZIP_URL"
 EOF
