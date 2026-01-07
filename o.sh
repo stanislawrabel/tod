@@ -196,8 +196,8 @@ PATCH="$security_os"
 VERSION="$version_type_id"
 LOCAL_INSTALL=
 MD5=$md5
-ABOUT="https://gauss-componentotamanual.allawnofs.com/remove-4e22fb4f6b60d23723825d739bd3992d/component-ota/26/01/04/2afc04be5ce5437798eb9cbc8bb635ed.html"
-DOWNLOAD="https://gauss-compota-c-fr.allawnofs.com/remove-4e22fb4f6b60d23723825d739bd3992d/g-e85d254ec8c5f58e7bf6e5729bd6b72f/component-ota/25/12/15/0ee00b1ae4fd4e8398d047ab38b4f071.zip"
+ABOUT="$about_update_url"
+DOWNLOAD="FINAL_ZIP_URL"
 
 EOF
 
