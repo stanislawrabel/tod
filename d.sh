@@ -1,16 +1,16 @@
 #!/usr/bin/env bash
 set -e
+BASE_DIR="/mnt/c/DownloadeR"
+COMMON_FILE="/mnt/c/DownloadeR/ota_common.txt"
 
-# ===============================
-#  📦 OTA DownloadeR (FINAL)
-# ===============================
+# === FIX WORKING DIRECTORY ===
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR" || exit 1
 
-# === DETEKCIA PROSTREDIA ===
-if [[ -d /mnt/c ]]; then
-  BASE_DIR="/mnt/c/DownloadeR"
-else
-  BASE_DIR="/storage/emulated/0/Download/DownloadeR"
-fi
+DEVICES_FILE="$SCRIPT_DIR/devices.txt"
+MODELS_FILE="$SCRIPT_DIR/models.txt"
+COMMON_OUT="mmt/c/DownloadeR/ota_common.txt"
+
 
 COMMON_FILE="$BASE_DIR/ota_common.txt"
 
