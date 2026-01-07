@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+/usr/bin/env bash
 set -e
 
 # ===============================
@@ -14,84 +14,71 @@ fi
 
 COMMON_FILE="$BASE_DIR/ota_common.txt"
 
-# === KONTROLY ===
-if [[ ! -f "$COMMON_FILE" ]]; then
-  echo "❌ ota_common.txt not found:"
-  echo "   $COMMON_FILE"
-  exit 1
-fi
 
-if ! command -v aria2c >/dev/null; then
-  echo "❌ aria2c not installed"
-  exit 1
-fi
-
-# === LOAD OTA COMMON ===
-set -a
 source "$COMMON_FILE"
-set +a
 
-# === VALIDÁCIA ===
-if [[ -z "$DOWNLOAD" || ! "$DOWNLOAD" =~ ^https?:// ]]; then
-  echo "❌ Invalid DOWNLOAD URL"
+# === 🧠 CHECK ARIA2 ===
+if ! command -v aria2c &>/dev/null; then
+  echo -e "${RED}❌ aria2c not installed .${RESET}"
+  echo "👉 Run: pkg install aria2 -y"
   exit 1
 fi
 
-mkdir -p "$BASE_DIR"
+FINAL_URL="$DOWNLOAD"
 
-TARGET_NAME="${OTA}.zip"
-FINAL_PATH="$BASE_DIR/$TARGET_NAME"
+if [[ ! "$FINAL_URL" =~ ^https?:// ]]; then
+  echo "❌ Invalid FINAL_URL"
+  exit 1
+fi
+# === LOAD COMMON ===
+fix_old_zip() {
+  echo "$1" | sed 's/gauss-componentotamanual/gauss-opexcostmanual-eu/'
+}
 
-# === FUNKCIA: resolve downloadCheck ===
-resolve_downloadcheck() {
-  curl -sIL --http1.1 \
+resolve_zip() {
+  curl -s -I --http1.1 \
     -H "User-Agent: Dalvik/2.1.0 (Linux; Android 16)" \
     -H "userId: oplus-ota|16002018" \
     -H "Accept: */*" \
     -H "Accept-Encoding: identity" \
-    "$1" | awk '/^location:/I {print $2}' | tr -d '\r' | tail -1
+    "$1" \
+  | grep -i '^location:' \
+  | tail -1 \
+  | awk '{print $2}' \
+  | tr -d '\r'
 }
 
 FINAL_URL="$DOWNLOAD"
 
-if [[ "$FINAL_URL" == *downloadCheck* ]]; then
-  echo "🔄 Resolving downloadCheck..."
-  FINAL_URL=$(resolve_downloadcheck "$FINAL_URL")
+# === RESOLVE IF NEEDED ===
+if [[ "$FINAL_URL" == *"downloadCheck"* ]]; then
+  echo "🔄 Resolving downloadCheck…"
+  FINAL_URL=$(resolve_zip "$FINAL_URL")
 fi
 
+# === VALIDATION ===
 if [[ -z "$FINAL_URL" || ! "$FINAL_URL" =~ ^https?:// ]]; then
-  echo "❌ Failed to resolve final download URL"
+  echo "❌ Invalid FINAL_URL"
   exit 1
 fi
 
-# === INFO ===
-echo "📥 Downloading OTA:"
-echo "   $FINAL_URL"
-echo "➡️  Saving to:"
-echo "   $FINAL_PATH"
-echo ""
+echo "📥 Downloading:"
+echo "$FINAL_URL"
+echo "➡️  Saving as: $FINAL_NAME"
 
-# === DOWNLOAD (S OTA HLAVIČKAMI) ===
-aria2c \
-  --file-allocation=trunc \
-  --continue=true \
-  --summary-interval=1 \
-  --dir="$BASE_DIR" \
-  --out="$TARGET_NAME" \
-  --header="User-Agent: Dalvik/2.1.0 (Linux; Android 16)" \
-  --header="userId: oplus-ota|16002018" \
-  --header="Accept: */*" \
-  --header="Accept-Encoding: identity" \
-  "$FINAL_URL"
 
-# === MD5 KONTROLA ===
-if [[ -f "$FINAL_PATH" && -n "$MD5" && "$MD5" != "md5sum" ]]; then
+TARGET_DIR="/storage/emulated/0/Download/DownloadeR"
+TARGET_NAME="${OTA}.zip"
+
+aria2c "$FINAL_URL" -d "$TARGET_DIR" -o "$TARGET_NAME"
+
+FINAL_PATH="$TARGET_DIR/$TARGET_NAME"
+
+if [[ -n "$MD5" && -f "$FINAL_PATH" ]]; then
   echo "🔐 Verifying MD5..."
-  echo "${MD5}  ${FINAL_PATH}" | md5sum -c -
-elif [[ ! -f "$FINAL_PATH" ]]; then
-  echo "❌ Download failed – file not found, skipping MD5"
+  echo "$MD5  $FINAL_PATH" | md5sum -c -
 else
-  echo "⚠️ MD5 not provided – skipping check"
+  echo "⚠️ MD5 skipped (missing hash or file)"
 fi
 
 echo "✅ Done: $FINAL_PATH"
