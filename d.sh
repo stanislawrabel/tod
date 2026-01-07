@@ -24,12 +24,6 @@ if ! command -v aria2c &>/dev/null; then
   exit 1
 fi
 
-FINAL_URL="$DOWNLOAD"
-
-if [[ ! "$FINAL_URL" =~ ^https?:// ]]; then
-  echo "❌ Invalid FINAL_URL"
-  exit 1
-fi
 # === LOAD COMMON ===
 fix_old_zip() {
   echo "$1" | sed 's/gauss-componentotamanual/gauss-opexcostmanual-eu/'
