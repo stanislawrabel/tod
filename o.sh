@@ -197,7 +197,7 @@ VERSION="$version_type_id"
 LOCAL_INSTALL=
 MD5=$md5
 ABOUT="$about_update_url"
-DOWNLOAD="FINAL_ZIP_URL"
+DOWNLOAD="$FINAL_ZIP_URL"
 
 EOF
 
