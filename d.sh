@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
 set -e
 BASE_DIR="/mnt/c/DownloadeR"
+
+if [[ ! -w "/mnt/c" ]]; then
+  BASE_DIR="$HOME/DownloadeR"
+fi
+
+mkdir -p "$BASE_DIR"
+
+
+
+
+
+BASE_DIR="/mnt/c/DownloadeR"
 COMMON_FILE="/mnt/c/DownloadeR/ota_common.txt"
 
-# === FIX WORKING DIRECTORY ===
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR" || exit 1
-
-DEVICES_FILE="$SCRIPT_DIR/devices.txt"
-MODELS_FILE="$SCRIPT_DIR/models.txt"
-COMMON_OUT="mmt/c/DownloadeR/ota_common.txt"
+COMMON_OUT="/mmt/c/DownloadeR/ota_common.txt"
 
 
 COMMON_FILE="$BASE_DIR/ota_common.txt"
@@ -64,9 +70,15 @@ echo "➡️  Saving as: $FINAL_NAME"
 TARGET_DIR="/nmt/c/DownloadeR"
 TARGET_NAME="${OTA}.zip"
 
-aria2c "$FINAL_URL" -d "$TARGET_DIR" -o "$TARGET_NAME"
+FINAL_PATH="$BASE_DIR/${OTA}.zip"
 
-FINAL_PATH="$TARGET_DIR/$TARGET_NAME"
+aria2c \
+  --file-allocation=trunc \
+  --summary-interval=1 \
+  --continue=true \
+  --out="${OTA}.zip" \
+  --dir="$BASE_DIR" \
+  "$FINAL_URL"
 
 if [[ -n "$MD5" && -f "$FINAL_PATH" ]]; then
   echo "🔐 Verifying MD5..."
