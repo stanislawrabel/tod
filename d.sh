@@ -67,7 +67,7 @@ echo "$FINAL_URL"
 echo "➡️  Saving as: $FINAL_NAME"
 
 
-TARGET_DIR="/storage/emulated/0/Download/DownloadeR"
+TARGET_DIR="/nmt/c/DownloadeR"
 TARGET_NAME="${OTA}.zip"
 
 aria2c "$FINAL_URL" -d "$TARGET_DIR" -o "$TARGET_NAME"
